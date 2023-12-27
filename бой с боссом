@@ -2,11 +2,18 @@ internal class Program
 {
     private static void Main(string[] args)
     {
+        const string CommandDamage = "1";
+        const string CommandSkillRage = "2";
+        const string CommandSkillSpiritCall = "3";
+        const string CommandSkillMeditation = "4";
+        const string CommandSkillCounterAttack = "5";
+
         Random random = new Random();
         int healthHero = 850;
+        int minHealthHero = 300;
         int healthBoss = 1400;
 
-        int minDamageHero = 60;
+        int minDamageHero = 70;
         int maxDamageHero = 85;
         int damageHero = random.Next(minDamageHero, maxDamageHero);
         int minDamageBoss = 100;
@@ -21,112 +28,83 @@ internal class Program
         int manaMeditation = 50;
         int manaCounterAttack = 40;
 
-        string castSkills;
-        const string commandDamage = "1";
-        const string commandSkillRage = "2";
         int minDamageRage = 95;
         int maxDamageRage = 110;
         int damageRage = random.Next(minDamageRage, maxDamageRage);
-        const string commandSkillSpiritCall = "3";
         int minDamageSpirit = 90;
         int maxDamageSpirit = 110;
         int damageSpirit = random.Next(minDamageSpirit, maxDamageSpirit);
-        const string commandSkillMeditation = "4";
-        int meditation = 500;
-        const string commandSkillCounterAttack = "5";
+        int meditation = 600;
         int minConterAttack = 100;
         int maxCounterAttack = 120;
         int damageCounterAttack = random.Next(minConterAttack, maxCounterAttack);
 
-        bool startGame = true;
+        bool isStartGame = true;
         string selectedSkill = "";
 
         Console.WriteLine("Добро пожаловать на арену! Сегодня вы будите сражаться с боссом");
         Console.WriteLine($"Параметры вашего героя: {healthHero} - здоровья, {damageHero} урона, {manaHero} маны.");
         Console.WriteLine($"Параметры босса: {healthBoss} - здоровья, {damageBoss} - урона.");
 
-        while (startGame)
+        while (isStartGame)
         {
             Console.WriteLine("У Вас есть несколько умений, которые вы можете использовать во время боя. Выберите умение, чтобы начать бой: ");
-            Console.WriteLine($"{commandDamage} - Вы наносите обычный удар {damageHero} урона.");
-            Console.WriteLine($"{commandSkillRage} - Вы впадаете в ярость и наносите {damageRage} урона. Расход маны - {manaRage}.");
-            Console.WriteLine($"{commandSkillSpiritCall} - Вы призываете духа, который наносит {damageSpirit} урона. Расход маны - {manaSpiritCall}.");
-            Console.WriteLine($"{commandSkillMeditation} - Вы восстанавливаете себе {meditation} единиц здоровья. Расход маны - {manaMeditation}.");
-            Console.WriteLine($"{commandSkillCounterAttack} - Вы блокируете атаку босса и наносите {damageCounterAttack} урона. Расход маны - {manaCounterAttack}.");
+            Console.WriteLine($"{CommandDamage} - Вы наносите обычный удар {damageHero} урона.");
+            Console.WriteLine($"{CommandSkillRage} - Вы впадаете в ярость и наносите {damageRage} урона. Расход маны - {manaRage}.");
+            Console.WriteLine($"{CommandSkillSpiritCall} - Вы призываете духа, который наносит {damageSpirit} урона. Расход маны - {manaSpiritCall}.");
+            Console.WriteLine($"{CommandSkillMeditation} - Вы восстанавливаете себе {meditation} единиц здоровья. Расход маны - {manaMeditation}.\nНавык возможно использовать, когда здоровье ниже критического показателя - {minHealthHero}.");
+            Console.WriteLine($"{CommandSkillCounterAttack} - Вы блокируете атаку босса и наносите {damageCounterAttack} урона. Расход маны - {manaCounterAttack}.");
             selectedSkill = Console.ReadLine();
 
-            if (healthHero <= 0 && healthBoss <= 0)
+            switch (selectedSkill)
             {
-                startGame = false;
-                Console.WriteLine("Ничья!");
-            }
-            else if (healthHero <= 0)
-            {
-                startGame = false;
-                Console.WriteLine("Босс одержал победу!");
-            }
-            else if (healthBoss <= 0)
-            {
-                startGame = false;
-                Console.WriteLine("Герой одержал победу!");
-            }
-            else if (manaHero < 0)
-            {
-                startGame = false;
-                Console.WriteLine("У героя закончилась мана.");
-            }
-            else
-            {
-                switch (selectedSkill)
-                {
-                    case commandDamage:
-                        healthBoss -= damageHero;
+                case CommandDamage:
+                    healthBoss -= damageHero;
+                    healthHero -= damageBoss;
+                    Console.WriteLine($"Герой потерял {damageBoss} единиц здоровья.");
+                    Console.WriteLine($"Босс потерял {damageHero} единиц здоровья.");
+                    Console.WriteLine($"Здоровье героя: {healthHero}.\nЗдоровье босса: {healthBoss}.");
+                    Console.WriteLine($"У героя осталось {manaHero} единиц маны.");
+                    break;
+
+                case CommandSkillRage:
+                    if (manaHero >= manaRage)
+                    {
+                        healthBoss -= damageRage;
+                        manaHero -= manaRage;
                         healthHero -= damageBoss;
                         Console.WriteLine($"Герой потерял {damageBoss} единиц здоровья.");
-                        Console.WriteLine($"Босс потерял {damageHero} единиц здоровья.");
+                        Console.WriteLine($"Босс потерял {damageRage} единиц здоровья.");
                         Console.WriteLine($"Здоровье героя: {healthHero}.\nЗдоровье босса: {healthBoss}.");
                         Console.WriteLine($"У героя осталось {manaHero} единиц маны.");
-                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("У героя недостаточно маны.");
+                    }
+                    break;
 
-                    case commandSkillRage:
-                  
-                        if (manaHero >= manaRage)
-                        {
-                            healthBoss -= damageRage;
-                            manaHero -= manaRage;
-                            healthHero -= damageBoss;
-                            Console.WriteLine($"Герой потерял {damageBoss} единиц здоровья.");
-                            Console.WriteLine($"Босс потерял {damageRage} единиц здоровья.");
-                            Console.WriteLine($"Здоровье героя: {healthHero}.\nЗдоровье босса: {healthBoss}.");
-                            Console.WriteLine($"У героя осталось {manaHero} единиц маны.");
-                        }
-                        else
-                        {
-                            Console.WriteLine("У героя недостаточно маны.");
-                        }
-                        break;
+                case CommandSkillSpiritCall:
+                    if (manaHero >= manaSpiritCall)
+                    {
+                        healthBoss -= damageSpirit;
+                        manaHero -= manaSpiritCall;
+                        healthHero -= damageBoss;
+                        Console.WriteLine($"Герой потерял {damageBoss} единиц здоровья.");
+                        Console.WriteLine($"Босс потерял {damageSpirit} единиц здоровья.");
+                        Console.WriteLine($"Здоровье героя: {healthHero}.\nЗдоровье босса: {healthBoss}.");
+                        Console.WriteLine($"У героя осталось {manaHero} единиц маны.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("У героя недостаточно маны.");
+                    }
+                    break;
 
-                    case commandSkillSpiritCall:
-                  
-                        if (manaHero >= manaSpiritCall)
-                        {
-                            healthBoss -= damageSpirit;
-                            manaHero -= manaSpiritCall;
-                            healthHero -= damageBoss;
-                            Console.WriteLine($"Герой потерял {damageBoss} единиц здоровья.");
-                            Console.WriteLine($"Босс потерял {damageSpirit} единиц здоровья.");
-                            Console.WriteLine($"Здоровье героя: {healthHero}.\nЗдоровье босса: {healthBoss}.");
-                            Console.WriteLine($"У героя осталось {manaHero} единиц маны.");
-                        }
-                        else
-                        {
-                            Console.WriteLine("У героя недостаточно маны.");
-                        }
-                        break;
-
-                    case commandSkillMeditation:
-                  
-                        if (manaHero >= manaMeditation)
+                case CommandSkillMeditation:
+                    if (manaHero >= manaMeditation)
+                    {
+                        if (healthHero <= minHealthHero)
                         {
                             healthHero += meditation;
                             manaHero -= manaMeditation;
@@ -135,36 +113,60 @@ internal class Program
                             Console.WriteLine($"Здоровье героя: {healthHero}.\nЗдоровье босса: {healthBoss}.");
                             Console.WriteLine($"У героя осталось {manaHero} единиц маны.");
                         }
-                        else
+                        else if (healthHero >= minHealthHero)
                         {
-                            Console.WriteLine("У героя недостаточно маны.");
+                            Console.WriteLine("Здоровье вашего героя не ниже критического.");
                         }
-                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("У героя недостаточно маны.");
+                    }
+                    break;
 
-                    case commandSkillCounterAttack:
-                  
-                        if (manaHero >= manaCounterAttack)
-                        {
-                            healthBoss -= damageCounterAttack;
-                            manaHero -= manaCounterAttack;
-                            Console.WriteLine($"Герой заблокировал атаку босса.");
-                            Console.WriteLine($"Босс потерял {damageCounterAttack} единиц здоровья.");
-                            Console.WriteLine($"Здоровье героя: {healthHero}.\nЗдоровье босса: {healthBoss}.");
-                            Console.WriteLine($"У героя осталось {manaHero} единиц маны.");
-                        }
-                        else
-                        {
-                            Console.WriteLine("У героя недостаточно маны.");
-                        }
-                        break;
+                case CommandSkillCounterAttack:
+                    if (manaHero >= manaCounterAttack)
+                    {
+                        healthBoss -= damageCounterAttack;
+                        manaHero -= manaCounterAttack;
+                        Console.WriteLine($"Герой заблокировал атаку босса.");
+                        Console.WriteLine($"Босс потерял {damageCounterAttack} единиц здоровья.");
+                        Console.WriteLine($"Здоровье героя: {healthHero}.\nЗдоровье босса: {healthBoss}.");
+                        Console.WriteLine($"У героя осталось {manaHero} единиц маны.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("У героя недостаточно маны.");
+                    }
+                    break;
 
-                    default:
-                        Console.WriteLine("Герой не знает такого умения.");
-                        break;
-                }
+                default:
+                    Console.WriteLine("Герой не знает такого умения.");
+                    break;
             }
-        }
 
-        Console.ReadKey();
+            if (healthHero <= 0 && healthBoss <= 0)
+            {
+                isStartGame = false;
+                Console.WriteLine("Ничья!");
+            }
+            else if (healthHero <= 0)
+            {
+                isStartGame = false;
+                Console.WriteLine("Босс одержал победу!");
+            }
+            else if (healthBoss <= 0)
+            {
+                isStartGame = false;
+                Console.WriteLine("Герой одержал победу!");
+            }
+            else if (manaHero < 0)
+            {
+                isStartGame = false;
+                Console.WriteLine("У героя закончилась мана.");
+            }
+
+            Console.ReadKey();
+        }
     }
-}  
+}
