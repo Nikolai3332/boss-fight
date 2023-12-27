@@ -34,7 +34,7 @@ internal class Program
         int minDamageSpirit = 90;
         int maxDamageSpirit = 110;
         int damageSpirit = random.Next(minDamageSpirit, maxDamageSpirit);
-        int meditation = 600;
+        int meditationHealth = 600;
         int minConterAttack = 100;
         int maxCounterAttack = 120;
         int damageCounterAttack = random.Next(minConterAttack, maxCounterAttack);
@@ -144,6 +144,7 @@ internal class Program
                     break;      
             }
         }
+
         if (healthHero <= 0 && healthBoss <= 0)
         {
             Console.WriteLine("Ничья!");
