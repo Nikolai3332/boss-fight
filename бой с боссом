@@ -39,14 +39,13 @@ internal class Program
         int maxCounterAttack = 120;
         int damageCounterAttack = random.Next(minConterAttack, maxCounterAttack);
 
-        bool isStartGame = true;
         string selectedSkill = "";
 
         Console.WriteLine("Добро пожаловать на арену! Сегодня вы будите сражаться с боссом");
         Console.WriteLine($"Параметры вашего героя: {healthHero} - здоровья, {damageHero} урона, {manaHero} маны.");
         Console.WriteLine($"Параметры босса: {healthBoss} - здоровья, {damageBoss} - урона.");
 
-        while (isStartGame)
+        while (healthHero > 0 && healthBoss > 0)
         {
             Console.WriteLine("У Вас есть несколько умений, которые вы можете использовать во время боя. Выберите умение, чтобы начать бой: ");
             Console.WriteLine($"{CommandDamage} - Вы наносите обычный удар {damageHero} урона.");
@@ -142,31 +141,22 @@ internal class Program
 
                 default:
                     Console.WriteLine("Герой не знает такого умения.");
-                    break;
+                    break;      
             }
-
-            if (healthHero <= 0 && healthBoss <= 0)
-            {
-                isStartGame = false;
-                Console.WriteLine("Ничья!");
-            }
-            else if (healthHero <= 0)
-            {
-                isStartGame = false;
-                Console.WriteLine("Босс одержал победу!");
-            }
-            else if (healthBoss <= 0)
-            {
-                isStartGame = false;
-                Console.WriteLine("Герой одержал победу!");
-            }
-            else if (manaHero < 0)
-            {
-                isStartGame = false;
-                Console.WriteLine("У героя закончилась мана.");
-            }
-
-            Console.ReadKey();
         }
+        if (healthHero <= 0 && healthBoss <= 0)
+        {
+            Console.WriteLine("Ничья!");
+        }
+        else if (healthHero <= 0)
+        {
+            Console.WriteLine("Босс одержал победу!");
+        }
+        else if (healthBoss <= 0)
+        {
+            Console.WriteLine("Герой одержал победу!");
+        }
+
+        Console.ReadKey();
     }
 }
